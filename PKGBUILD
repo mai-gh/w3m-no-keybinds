@@ -34,6 +34,11 @@ build() {
     sed -i "s/ $i/ nulcmd/g" keybind.c
   done
 
+  # force scrolling via cursor on last line to be one line at a time,
+  #   NOT a half page
+  sed -i -e 's/buf->topLine = lineSkip(buf, buf->topLine, n, FALSE);/buf->topLine = lineSkip(buf, buf->topLine, 1, FALSE);/' \
+         -e 's/buf->topLine = lineSkip(buf, buf->topLine, -n, FALSE);/buf->topLine = lineSkip(buf, buf->topLine, -1, FALSE);/' display.c
+
   ./configure \
     --prefix=/usr \
     --libexecdir=/usr/lib \
